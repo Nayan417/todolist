@@ -13,9 +13,9 @@ app.use(express.static("public"));
 // connect to data base
 mongoose.set('strictQuery', false);
 
-mongoose.connect("mongodb+srv://Nayan40:NyNmandal%402002@cluster0.3eixsdh.mongodb.net/todolistDB", { useNewUrlParser: true }, function (err) {
+mongoose.connect("mongodb+srv://admin-Nayan417:MandalCSE40@cluster0.urtljvs.mongodb.net/todolistDB", { useNewUrlParser: true }, function (err) {
   if (err) {
-    console.log("Error is occuring");
+    console.log("Connection problem");
     console.log(err);
   } else {
     console.log("DataBase is created successfully");
@@ -34,13 +34,13 @@ const listSchema = new mongoose.Schema({
   items: [itemSchema]
 });
 
-const List = new mongoose.model("List", listSchema);
+ const List = new mongoose.model("List", listSchema);
 
-const studyListSchema = new mongoose.Schema({
-  name: String
-});
+// const studyListSchema = new mongoose.Schema({
+//   name: String
+// });
 
-const Study = mongoose.model("studyList", studyListSchema);
+// const Study = mongoose.model("studyList", studyListSchema);
 
 
 const item1 = new Item({
@@ -97,23 +97,14 @@ app.get("/:customListName", function (req, res) {
           name: customListName,
           items: defaultItems
         });
-
         list.save();
         res.redirect("/" + customListName);
       } else {
-        console.log("Already exist");
+      //  console.log("Already exist");
 
-        if (foundItems.items.length === 0) {
-          // .insertMany(defaultItems, function (err) {
-          // const list = new List({
-          //   name: customListName,
-          //   items: defaultItems 
-          // });
-          foundItems.items = defaultItems;
-          foundItems.save();
-        }
         res.render("list", { listTitle: foundItems.name, newListItems: foundItems.items });
       }
+
     }
   });
 
@@ -131,6 +122,7 @@ app.post("/", function (req, res) {
 
   if (itemTitile == "Today Shedule") {
     newItem.save();
+
     res.redirect("/");
   } else {
     List.findOne({ name: itemTitile }, function (err, foundList) {
@@ -141,7 +133,9 @@ app.post("/", function (req, res) {
       }
     });
   }
+
 });
+
 
 app.post("/delete", function (req, res) {
   // console.log(req.body.checkbox);
